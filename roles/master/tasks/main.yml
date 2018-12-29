@@ -11,6 +11,10 @@
       environment:
         KUBECONFIG: /etc/kubernetes/admin.conf
 
-- include_tasks: kubectl_user.yml
-
 - include_tasks: networking_weave.yml
+  args:
+    apply:
+      environment:
+        KUBECONFIG: /etc/kubernetes/admin.conf
+
+- include_tasks: kubectl_user.yml
