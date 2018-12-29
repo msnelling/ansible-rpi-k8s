@@ -1,0 +1,23 @@
+---
+- name: Kubectl Users | create {{ kubectl_user_home }}/.kube directory
+  file:
+    path: "{{ kubectl_user_home }}/.kube"
+    owner: "{{ kubectl_user }}"
+    group: "{{ kubectl_user }}"
+    state: directory
+
+- name: Kubectl Users | copy admin config to kubectl user
+  copy:
+    remote_src: yes
+    src: /etc/kubernetes/admin.conf
+    dest: "{{ kubectl_user_home }}/.kube/config"
+    owner: "{{ kubectl_user }}"
+    group: "{{ kubectl_user }}"
+
+- name: Kubectl Users | set up aliases
+  copy:
+    content: |
+      alias kc=kubectl
+    dest: "{{ kubectl_user_home }}/.bash_aliases"
+    owner: "{{ kubectl_user }}"
+    group: "{{ kubectl_user }}"

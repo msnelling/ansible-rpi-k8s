@@ -18,9 +18,12 @@
   - import_role:
       name: kubeadm
     tags: [k8s,kubeadm]
-  - import_role:
-      name: master
-    tags: [k8s,master]
 
 - hosts: master
   become: true
+  tasks:
+  - import_role:
+      name: master
+    vars:
+      kubectl_user: "{{ my_username }}"
+    tags: [k8s,master]

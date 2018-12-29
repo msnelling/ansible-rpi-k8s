@@ -3,6 +3,7 @@
   command: kubeadm reset --force
   args:
     removes: /etc/kubernetes/admin.conf
+  tags: [kubeadm_init]
 
 - name: Init | generate kubeadm configuration
   template:
@@ -25,3 +26,5 @@
 
 - name: Init | allow scheduling pods on master node
   command: kubectl taint nodes --all node-role.kubernetes.io/master-
+  # Disable, it is done in kubeadm config
+  when: false

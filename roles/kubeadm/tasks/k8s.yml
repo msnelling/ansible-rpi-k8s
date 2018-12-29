@@ -31,3 +31,5 @@
     insertbefore: '^ExecStart=$'
     line: 'Environment="KUBELET_EXTRA_ARGS=--fail-swap-on=false"'
     state: present
+  # Disable, it is done in kubeadm config
+  when: false

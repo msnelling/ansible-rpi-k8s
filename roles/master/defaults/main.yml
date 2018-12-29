@@ -7,3 +7,4 @@ apiserver_fqdn: "{{ ansible_fqdn }}"
 apiserver_ipv4: "{{ ansible_default_ipv4.address }}"
 apiserver_port: 6443
 certs_dir: /etc/kubernetes/pki
+kubectl_user_home: "/home/{{ kubectl_user }}"

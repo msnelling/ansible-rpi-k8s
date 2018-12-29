@@ -6,11 +6,14 @@ localAPIEndpoint:
   bindPort: {{ apiserver_port }}
 nodeRegistration:
   name: {{ node_name }}
-  #taints:
+  kubeletExtraArgs:
+    fail-swap-on: "false"
+  taints: []
 ---
 apiVersion: kubeadm.k8s.io/v1beta1
 kind: ClusterConfiguration
 clusterName: {{ cluster_name }}
+certificatesDir: {{ certs_dir }}
 apiServer:
   extraArgs:
     authorization-mode: "Node,RBAC"
@@ -18,4 +21,7 @@ apiServer:
   certSANs:
   - {{ apiserver_ipv4 }}
   - {{ apiserver_fqdn }}
-certificatesDir: {{ certs_dir }}
+controllerManager:
+  extraArgs:
+    pod-eviction-timeout: 10s
+    node-monitor-grace-period: 10s
