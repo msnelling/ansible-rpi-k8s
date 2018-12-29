@@ -1,0 +1,15 @@
+---
+- name: Raspbian - Download installer script
+  get_url:
+    url: https://get.docker.com
+    dest: /tmp/docker-installer.sh
+    mode: 0755
+  notify: restart docker
+
+- name: Raspbian - execute the installer script
+  shell: /tmp/docker-installer.sh
+
+- name: Raspbian - remove the installer script
+  file: 
+    path: /tmp/docker-installer.sh
+    state: absent

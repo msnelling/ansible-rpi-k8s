@@ -1,0 +1,15 @@
+---
+- name: Disable Swap - check if swap enabled
+  shell: swapon -s | wc -l
+  register: swap_enabled
+
+- name: Disable Swap - disable swap
+  shell: "{{ item }}"
+  with_items: 
+    - dphys-swapfile swapoff
+    - dphys-swapfile uninstall
+    - update-rc.d dphys-swapfile disable
+  when: swap_enabled.stdout | int > 1
+  notify:
+  - restart system
+  - wait for system restart

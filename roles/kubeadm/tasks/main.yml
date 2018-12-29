@@ -1,0 +1,10 @@
+---
+- name: Ensure work directory exists
+  file:
+    name: "{{ work_directory }}"
+    state: directory
+    mode: 0770
+
+- include_tasks: cmdline.yml
+- include_tasks: disable_swap.yml
+- include_tasks: k8s.yml

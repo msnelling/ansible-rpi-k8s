@@ -1,0 +1,27 @@
+---
+- name: Init | reset kubernetes
+  command: kubeadm reset --force
+  args:
+    removes: /etc/kubernetes/admin.conf
+
+- name: Init | generate kubeadm configuration
+  template:
+    src: kubeadm_config.yaml.j2
+    dest: "{{ kubeadm_config }}"
+    mode: 0644
+
+- name: Init | initialise kubernetes cluster
+  command: kubeadm init --config {{ kubeadm_config }}
+  args:
+    creates: /etc/kubernetes/admin.conf
+  register: kubeadm_init
+
+- name: Init | save kubeadm join command
+  set_fact:
+    kubeadm_join: "{{ kubeadm_init.stdout | regex_search('kubeadm\\s+join\\s+.*$') }}"
+
+- debug:
+    msg: "{{ kubeadm_join }}"
+
+- name: Init | allow scheduling pods on master node
+  command: kubectl taint nodes --all node-role.kubernetes.io/master-

@@ -1,0 +1,34 @@
+---
+- name: Cmdline.txt - test for cgroup-cpuset
+  command: 'grep "cgroup_enable=cpuset" /boot/cmdline.txt'
+  register: cgroup_cpuset
+  failed_when: false
+
+- name: Cmdline.txt - add cgroup_enable=cpuset
+  lineinfile:
+    path: /boot/cmdline.txt
+    backrefs: True
+    state: present
+    regexp: '(.*)$'
+    line: '\1 cgroup_enable=cpuset'
+  when: cgroup_cpuset.stdout == ""
+  notify:
+  - restart system
+  - wait for system restart
+
+- name: Cmdline.txt - test for cgroup-memory
+  command: 'grep "cgroup_enable=memory" /boot/cmdline.txt'
+  register: cgroup_memory
+  failed_when: false
+
+- name: Cmdline.txt - add cgroup_enable=memory"
+  lineinfile:
+    path: /boot/cmdline.txt
+    backrefs: True
+    state: present
+    regexp: '(.*)$'
+    line: '\1 cgroup_enable=memory'
+  when: cgroup_memory.stdout == ""
+  notify:
+  - restart system
+  - wait for system restart

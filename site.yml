@@ -1,0 +1,26 @@
+---
+- hosts: all
+  become: true
+  tasks:
+  - import_role:
+      name: base
+    vars:
+      username: "{{ my_username }}"
+      password: "{{ my_password }}"
+      user_groups: "{{ my_groups }}"
+      ssh_authorized_keys: "{{ my_authorized_keys }}"
+    tags: [base]
+  - import_role:
+      name: docker
+    vars:
+      users: ["{{ my_username }}"]
+    tags: [docker]
+  - import_role:
+      name: kubeadm
+    tags: [k8s,kubeadm]
+  - import_role:
+      name: master
+    tags: [k8s,master]
+
+- hosts: master
+  become: true

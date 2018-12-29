@@ -1,0 +1,21 @@
+---
+apiVersion: kubeadm.k8s.io/v1beta1
+kind: InitConfiguration
+localAPIEndpoint:
+  advertiseAddress: {{ apiserver_ipv4 }}
+  bindPort: {{ apiserver_port }}
+nodeRegistration:
+  name: {{ node_name }}
+  #taints:
+---
+apiVersion: kubeadm.k8s.io/v1beta1
+kind: ClusterConfiguration
+clusterName: {{ cluster_name }}
+apiServer:
+  extraArgs:
+    authorization-mode: "Node,RBAC"
+    service-node-port-range: 1-32767
+  certSANs:
+  - {{ apiserver_ipv4 }}
+  - {{ apiserver_fqdn }}
+certificatesDir: {{ certs_dir }}

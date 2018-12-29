@@ -1,0 +1,8 @@
+---
+- include_tasks: docker_raspbian.yml
+
+- name: Docker - enable service
+  service:
+    name: docker
+    state: started
+    enabled: yes

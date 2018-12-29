@@ -1,0 +1,23 @@
+---
+- name: Users - add my user
+  user:
+    name: "{{ username }}"
+    password: "{{ password | password_hash('sha512', inventory_hostname | hash('sha1') | truncate(16)) }}"
+    groups: "{{ user_groups }}"
+    append: true
+    shell: /bin/bash
+    skeleton: /etc/skel
+    state: present
+
+- name: Users - add the authorized SSH keys
+  authorized_key:
+    user: "{{ username }}"
+    key: "{{ item }}"
+    state: present
+  loop: "{{ ssh_authorized_keys }}"
+
+- name: Users - remove default user
+  user:
+    name: "{{ default_user }}"
+    remove: yes
+    state: absent

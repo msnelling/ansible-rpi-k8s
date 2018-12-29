@@ -1,0 +1,12 @@
+---
+- name: Ensure work directory exists
+  file:
+    name: "{{ work_directory }}"
+    state: directory
+    mode: 0770
+
+- include_tasks: init.yml
+  args:
+    apply:
+      environment:
+        KUBECONFIG: /etc/kubernetes/admin.conf
